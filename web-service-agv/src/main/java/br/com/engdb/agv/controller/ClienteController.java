@@ -15,7 +15,7 @@ public class ClienteController {
     private final AtomicLong counter = new AtomicLong();
 
 
-    @RequestMapping("/greeting")
+    @RequestMapping("/health")
     public Cliente greeting(@RequestParam(value="name", defaultValue="World") String name) {
         return new Cliente(counter.incrementAndGet(), String.format(template, name));
     }
