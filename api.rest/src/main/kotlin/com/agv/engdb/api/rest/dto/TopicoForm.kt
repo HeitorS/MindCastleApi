@@ -1,7 +1,7 @@
 package com.agv.engdb.api.rest.dto
 
-import org.springframework.lang.NonNull
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 data class TopicoForm (
@@ -10,8 +10,8 @@ data class TopicoForm (
         val titulo: String,
         @field:NotEmpty(message = "Mensagem não pode ser vazia")
         val mensagem: String,
-        @field:NonNull
+        @field:NotNull(message = "Curso não pode ser nulo")
         val idCurso: Long,
-        @field:NonNull
+        @field:NotNull(message = "Autor não pode ser nulo")
         val idAutor: Long
 )

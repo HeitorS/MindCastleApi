@@ -24,7 +24,7 @@ class ExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleInputNotNull(ex: MethodArgumentNotValidException, rq: HttpServletRequest): ErrorView {
+    fun handleInputNotEmpty(ex: MethodArgumentNotValidException, rq: HttpServletRequest): ErrorView {
         val message = HashMap<String,String?>()
         ex.bindingResult.fieldErrors.forEach {
                 e -> message.put(e.field, e.defaultMessage)
@@ -32,7 +32,18 @@ class ExceptionHandler {
         return ErrorView(
             status = HttpStatus.BAD_REQUEST.value(),
             error = HttpStatus.BAD_REQUEST.name,
-            message = ex.message.toString(),
+            message = message.toString(),
+            path = rq.servletPath
+        )
+    }
+
+    @ExceptionHandler(NoSuchElementException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleInputNotNull(ex: NoSuchElementException, rq: HttpServletRequest): ErrorView {
+        return ErrorView(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = HttpStatus.BAD_REQUEST.name,
+            message = ex.message,
             path = rq.servletPath
         )
     }
