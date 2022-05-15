@@ -4,9 +4,11 @@ import com.agv.engdb.api.rest.dto.TopicoForm
 import com.agv.engdb.api.rest.model.Topico
 import com.agv.engdb.api.rest.service.CursoService
 import com.agv.engdb.api.rest.service.UsuaroService
+import org.springframework.stereotype.Component
 
+@Component
 class TopicoFormMapper(private val cursoService: CursoService,
-                       private val usuarioService: UsuaroService): Mapper<TopicoForm, Topico> {
+                       private val usuarioService: UsuaroService): Mapper<TopicoForm,Topico> {
     override fun map(t: TopicoForm): Topico {
         return Topico(
             titulo = t.titulo,

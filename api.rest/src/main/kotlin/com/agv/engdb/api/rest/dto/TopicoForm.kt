@@ -9,8 +9,6 @@ data class TopicoForm (
         val titulo: String,
         @field:NotEmpty
         val mensagem: String,
-        @field:NotEmpty
         val idCurso: Long,
-        @field:NotEmpty
         val idAutor: Long
 )
