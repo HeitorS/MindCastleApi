@@ -1,66 +1,50 @@
 package com.agv.engdb.api.rest.service
 
-import com.agv.engdb.api.rest.dto.AltTopicoForm
-import com.agv.engdb.api.rest.dto.TopicoForm
-import com.agv.engdb.api.rest.dto.TopicoView
+import com.agv.engdb.api.rest.repository.TopicoRepository
 import com.agv.engdb.api.rest.exception.NotFoundException
 import com.agv.engdb.api.rest.mapper.AltTopicoFormMapper
 import com.agv.engdb.api.rest.mapper.TopicoFormMapper
 import com.agv.engdb.api.rest.mapper.TopicoViewMapper
-import com.agv.engdb.api.rest.model.Topico
+import com.agv.engdb.api.rest.dto.AltTopicoForm
 import org.springframework.stereotype.Service
-import kotlin.collections.ArrayList
+import com.agv.engdb.api.rest.dto.TopicoForm
+import com.agv.engdb.api.rest.dto.TopicoView
+import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 @Service
-class TopicoService (private var topicos: ArrayList<Topico> = ArrayList(),
+class TopicoService (private val repository: TopicoRepository,
                      private val topicoViewMapper: TopicoViewMapper,
-                     private val topicoFormMapper: TopicoFormMapper,
-                     private val altTopicoFormMapper: AltTopicoFormMapper
+                     private val topicoFormMapper: TopicoFormMapper
 ) {
 
     fun listar(): List<TopicoView> {
-        return topicos.stream().map { t ->
+        return repository.findAll().stream().map { t ->
             topicoViewMapper.map(t)
         }.collect(Collectors.toList())
     }
 
-    fun buscaTopicoPorId(id: Long): Topico {
-        return topicos.stream().filter { t ->
-            t.id == id
-        }.findFirst().orElseThrow{NotFoundException()}
-    }
-
     fun buscaPorId(id: Long): TopicoView {
-        val topico = buscaTopicoPorId(id)
+        val topico = repository.findById(id)
+            .orElseThrow{NotFoundException()}
         return topicoViewMapper.map(topico)
     }
 
     fun cadastrar(dto: TopicoForm): TopicoView {
-        var t = topicoFormMapper.map(dto);
-        t.id = (topicos.size + 1).toLong()
-        topicos += t
-        return topicoViewMapper.map(t)
+        var topico = topicoFormMapper.map(dto);
+        repository.insertTopico(dto.titulo, dto.mensagem, LocalDateTime.now().toString(),dto.idCurso, dto.idAutor, topico.status.name)
+        return topicoViewMapper.map(topico)
     }
 
     fun atualizar(form: AltTopicoForm): TopicoView {
-        var topico = buscaTopicoPorId(form.id)
-        topicos.remove(topico)
-        val t = altTopicoFormMapper.map(form)
-        topico = Topico (
-            id = t.id,
-            titulo = t.titulo,
-            mensagem = t.mensagem,
-            curso = topico.curso,
-            autor = topico.autor,
-            dataCriacao = topico.dataCriacao
-        )
-        topicos.add(topico)
+        var topico = repository.findById(form.id)
+            .orElseThrow{NotFoundException()}
+        topico.titulo = form.titulo
+        topico.mensagem = form.mensagem
         return topicoViewMapper.map(topico)
     }
 
     fun deletar(id: Long) {
-        val topico = buscaTopicoPorId(id)
-        topicos.remove(topico)
+        repository.deleteById(id)
     }
 }

@@ -1,19 +1,14 @@
 package com.agv.engdb.api.rest.service
 
-import com.agv.engdb.api.rest.model.Usuario
+import com.agv.engdb.api.rest.repository.UsuarioRepository
 import org.springframework.stereotype.Service
-import java.util.*
+import com.agv.engdb.api.rest.model.Usuario
 
 @Service
-class UsuaroService (var usuarios: List<Usuario>){
-
-    init {
-        val usuario = Usuario(1, "Heitor Victor", "heitor.silva@engdb.com.br")
-        usuarios = Arrays.asList(usuario)
-    }
+class UsuaroService (private val repository: UsuarioRepository){
 
     fun buscarPorId(id:Long): Usuario {
-        return usuarios.stream().filter({u -> u.id == id}).findFirst().get()
+        return repository.getById(id)
     }
 
 }

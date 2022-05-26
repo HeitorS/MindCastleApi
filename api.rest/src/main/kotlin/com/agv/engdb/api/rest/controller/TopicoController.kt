@@ -6,6 +6,7 @@ import com.agv.engdb.api.rest.dto.TopicoView
 import com.agv.engdb.api.rest.service.TopicoService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -33,6 +34,7 @@ class TopicoController(val service:  TopicoService ) {
     }
 
     @PostMapping
+    @Transactional
     fun cadastrar(@RequestBody @Valid dto: TopicoForm, uriBuilder: UriComponentsBuilder): ResponseEntity<TopicoView> {
         val topicoView = service.cadastrar(dto);
         val uri = uriBuilder.path("/topico/" + topicoView.id).build().toUri()
@@ -40,6 +42,7 @@ class TopicoController(val service:  TopicoService ) {
     }
 
     @PutMapping
+    @Transactional
     fun atualizar(@RequestBody @Valid form: AltTopicoForm): ResponseEntity<TopicoView> {
         val topicoView = service.atualizar(form)
         return ResponseEntity.ok(topicoView)
@@ -47,6 +50,7 @@ class TopicoController(val service:  TopicoService ) {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     fun deletar(@PathVariable id: Long) {
         service.deletar(id)
     }

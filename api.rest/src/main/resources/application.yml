@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/agencia_virtual"
+    username: "root"
+    password: "#Lgb07260102"
+
+  jpa:
+    database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
+    show-sql: true
+    format-sql: true
+
+
+
+
+
+
+
