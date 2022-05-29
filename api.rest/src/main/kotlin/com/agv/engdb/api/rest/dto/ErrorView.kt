@@ -1,6 +1,5 @@
 package com.agv.engdb.api.rest.dto
 
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 data class ErrorView (

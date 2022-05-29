@@ -1,11 +1,14 @@
 package com.agv.engdb.api.rest.exception
 
-import com.agv.engdb.api.rest.dto.ErrorView
-import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.web.bind.annotation.ResponseStatus
+import org.hibernate.exception.ConstraintViolationException
+import com.agv.engdb.api.rest.dto.ErrorView
+import org.springframework.http.HttpStatus
+
 import javax.servlet.http.HttpServletRequest
 
 @RestControllerAdvice
@@ -40,6 +43,50 @@ class ExceptionHandler {
     @ExceptionHandler(NoSuchElementException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleInputNotNull(ex: NoSuchElementException, rq: HttpServletRequest): ErrorView {
+        return ErrorView(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = HttpStatus.BAD_REQUEST.name,
+            message = ex.message,
+            path = rq.servletPath
+        )
+    }
+
+    @ExceptionHandler(EmptyResultDataAccessException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleSearchNotFound(ex: EmptyResultDataAccessException, rq: HttpServletRequest): ErrorView {
+        return ErrorView(
+            status = HttpStatus.NO_CONTENT.value(),
+            error = HttpStatus.NO_CONTENT.name,
+            message = NotFoundException().message(),
+            path = rq.servletPath
+        )
+    }
+
+    @ExceptionHandler(SenhaDiferenteCadstroException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleSenhaDiferenteCadstro(ex: SenhaDiferenteCadstroException, rq: HttpServletRequest): ErrorView {
+        return ErrorView(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = HttpStatus.BAD_REQUEST.name,
+            message = ex.message(),
+            path = rq.servletPath
+        )
+    }
+
+    @ExceptionHandler(CpfCadastradoException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCpfCadastrado(ex: CpfCadastradoException, rq: HttpServletRequest): ErrorView {
+        return ErrorView(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = HttpStatus.BAD_REQUEST.name,
+            message = ex.message(),
+            path = rq.servletPath
+        )
+    }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCpfCadastrado(ex: ConstraintViolationException, rq: HttpServletRequest): ErrorView {
         return ErrorView(
             status = HttpStatus.BAD_REQUEST.value(),
             error = HttpStatus.BAD_REQUEST.name,
