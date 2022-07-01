@@ -3,7 +3,6 @@ package com.agv.engdb.api.rest.model
 import java.time.LocalDateTime
 import javax.persistence.*
 
-
 @Entity
 @Table(name = "usuario")
 data class Usuario (
@@ -11,17 +10,11 @@ data class Usuario (
         @Column(name = "id")
         val id: Long? = null,
 
-        @Column(name = "nome")
-        var nome: String,
-
         @Column(name = "cpf")
         val cpf: String,
 
         @Column(name = "senha")
         var senha: String,
-
-        @Column(name = "email")
-        var email: String,
 
         @Column(name = "data_criacao")
         val data_criacao: LocalDateTime = LocalDateTime.now(),

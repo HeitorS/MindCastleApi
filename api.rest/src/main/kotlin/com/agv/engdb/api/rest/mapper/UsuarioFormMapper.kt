@@ -8,10 +8,8 @@ import com.agv.engdb.api.rest.model.Usuario
 class UsuarioFormMapper: Mapper<UsuarioForm, Usuario> {
     override fun map(u: UsuarioForm): Usuario {
         return Usuario(
-            nome = u.nome,
             cpf = u.cpf.replace(".","").replace("-","").replace("/",""),
             senha = u.senha,
-            email = u.email,
             tentativa_login = 0
         )
     }

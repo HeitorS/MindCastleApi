@@ -8,10 +8,8 @@ import com.agv.engdb.api.rest.model.Usuario
 class UsuarioViewMapper: Mapper<Usuario, UsuarioView> {
     override fun map(u: Usuario): UsuarioView {
         return UsuarioView(
-            nome = u.nome,
             cpf = u.cpf,
             senha = u.senha,
-            email = u.email,
             tentativa_login = u.tentativa_login
         )
     }

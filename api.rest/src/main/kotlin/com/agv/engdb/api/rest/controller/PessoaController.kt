@@ -11,41 +11,41 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.util.UriComponentsBuilder
-import com.agv.engdb.api.rest.service.UsuarioService
+import com.agv.engdb.api.rest.service.PessoaService
 import org.springframework.http.ResponseEntity
-import com.agv.engdb.api.rest.dto.UsuarioForm
-import com.agv.engdb.api.rest.dto.UsuarioView
+import com.agv.engdb.api.rest.dto.PessoaForm
+import com.agv.engdb.api.rest.dto.PessoaView
 import org.springframework.http.HttpStatus
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/usuario")
-class UsuarioController (val service: UsuarioService){
-
-    @GetMapping("/{cpf}")
-    fun buscaPorCPF(@PathVariable cpf: String): UsuarioView {
-        return service.buscaPorCPF(cpf);
+@RequestMapping("/pessoa")
+class PessoaController (val service: PessoaService) {
+    @GetMapping("/{id}")
+    fun buscaPorId(@PathVariable id: Long): PessoaView {
+        return service.buscaPorId(id);
     }
 
     @PostMapping
     @Transactional
-    fun cadastrar(@RequestBody @Valid dto: UsuarioForm,uriBuilder: UriComponentsBuilder): ResponseEntity<UsuarioView> {
-        val usuarioView = service.cadastrar(dto)
-        val uri = uriBuilder.path("/usuario/"+usuarioView.cpf).build().toUri()
-        return ResponseEntity.created(uri).body(usuarioView)
+    fun cadastrar(@RequestBody @Valid dto: PessoaForm, uriBuilder: UriComponentsBuilder): ResponseEntity<PessoaView> {
+        val pessoaView = service.cadastrar(dto)
+        val uri = uriBuilder.path("/pessoa/"+pessoaView.id_usuario).build().toUri()
+        return ResponseEntity.created(uri).body(pessoaView)
     }
 
     @PutMapping
     @Transactional
-    fun atualizar(@RequestBody @Valid form: UsuarioForm): ResponseEntity<UsuarioView> {
-        val usuarioView = service.atualizar(form)
-        return ResponseEntity.ok(usuarioView)
+    fun atualizar(@RequestBody @Valid form: PessoaForm): ResponseEntity<PessoaView> {
+        val pessoaView = service.atualizar(form)
+        return ResponseEntity.ok(pessoaView)
     }
 
-    @DeleteMapping("/{cpf}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    fun deletar(@PathVariable cpf: String) {
-        service.deletar(cpf)
+    fun deletar(@PathVariable id: Long) {
+        service.deletar(id)
     }
+
 }

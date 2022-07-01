@@ -40,9 +40,7 @@ class UsuarioService (
             throw SenhaDiferenteCadstroException()
         }
         val us = repository.findByCpf(form.cpf.replace(".","").replace("-","").replace("/",""))
-        us.nome = form.nome
         us.senha = form.senha
-        us.email = form.email
         repository.save(us)
         return usuarioViewMapper.map(us)
     }

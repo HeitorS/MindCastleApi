@@ -105,4 +105,15 @@ class ExceptionHandler {
             path = rq.servletPath
         )
     }
+
+    @ExceptionHandler(EmailCadastradoException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleEmailCadastrado(ex: EmailCadastradoException, rq: HttpServletRequest): ErrorView {
+        return ErrorView(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = HttpStatus.BAD_REQUEST.name,
+            message = ex.message(),
+            path = rq.servletPath
+        )
+    }
 }
