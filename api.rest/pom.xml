@@ -8,7 +8,7 @@
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.agv.engdb</groupId>
+	<groupId>com</groupId>
 	<artifactId>api.rest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api.rest</name>
@@ -65,6 +65,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>api_rest</finalName>
 		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
 		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 		<plugins>

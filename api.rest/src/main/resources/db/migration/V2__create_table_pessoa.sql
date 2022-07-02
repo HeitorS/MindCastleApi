@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `api_rest`.`pessoa` (
     `celular` VARCHAR(20),
     `data_nascimento` DATETIME NOT NULL,
     `sexo` VARCHAR(1) NOT NULL,
-    `id_usario` BIGINT NOT NULL,
+    `id_usuario` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT FK_PESSOA_ID_USUARIO FOREIGN KEY (`id_usario`) REFERENCES usuario (`id`)
+    CONSTRAINT FK_PESSOA_ID_USUARIO FOREIGN KEY (`id_usuario`) REFERENCES usuario (`id`)
 )
