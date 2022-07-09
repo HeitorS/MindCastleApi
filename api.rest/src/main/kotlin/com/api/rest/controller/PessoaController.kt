@@ -16,6 +16,9 @@ import com.api.rest.service.PessoaService
 import org.springframework.http.ResponseEntity
 import com.api.rest.dto.PessoaForm
 import com.api.rest.dto.PessoaView
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.RequestParam
 import javax.validation.Valid
@@ -26,6 +29,11 @@ class PessoaController (val service: PessoaService) {
     @GetMapping
     fun buscaPorEmail(@RequestParam(required = false) email: String?): PessoaView {
         return service.buscaPorEmail(email);
+    }
+
+    @GetMapping("/todos")
+    fun buscaTodos(@PageableDefault(size = 10) paginacao: Pageable): Page<PessoaView> {
+        return service.buscaTodos(paginacao);
     }
 
     @PostMapping

@@ -11,6 +11,8 @@ import com.api.rest.dto.PessoaForm
 import com.api.rest.dto.PessoaView
 import com.api.rest.mapper.EndPesFormMapper
 import com.api.rest.repository.End_PesRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 @Service
 class PessoaService (private val repository: PessoaRepository,
@@ -23,6 +25,10 @@ class PessoaService (private val repository: PessoaRepository,
     fun buscaPorEmail(email: String?): PessoaView {
         val pessoa = repository.findByEmail(email)
         return pessoaViewMapper.map(pessoa)
+    }
+
+    fun buscaTodos (paginacao: Pageable): Page<PessoaView> {
+        return repository.findAll(paginacao).map { p -> pessoaViewMapper.map(p) }
     }
 
     fun cadastrar(dto: PessoaForm): PessoaView {
