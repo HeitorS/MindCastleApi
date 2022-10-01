@@ -45,4 +45,5 @@ class UsuarioController (val service: UsuarioService){
     fun deletar(@PathVariable cpf: String){
         service.deletar(cpf)
     }
+
 }
