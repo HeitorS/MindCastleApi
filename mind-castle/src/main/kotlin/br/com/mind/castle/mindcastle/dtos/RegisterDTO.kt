@@ -1,8 +1,8 @@
 package br.com.mind.castle.mindcastle.dtos
 
 class RegisterDTO {
-    val name = ""
+    val nome = ""
     val email = ""
-    val password = ""
+    val senha = ""
 
 }

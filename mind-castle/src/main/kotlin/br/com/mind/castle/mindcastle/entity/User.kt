@@ -6,10 +6,12 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 
 @Entity
+@Table(name="usuario")
 class User {
 
     @Id
@@ -17,13 +19,13 @@ class User {
     var id: Int = 0
 
     @Column
-    var name = ""
+    var nome = ""
 
     @Column(unique = true)
     var email = ""
 
     @Column
-    var password = ""
+    var senha = ""
         @JsonIgnore
         get() = field
         set(value) {
@@ -32,6 +34,6 @@ class User {
         }
 
     fun comparePassword(password: String): Boolean {
-        return BCryptPasswordEncoder().matches(password, this.password)
+        return BCryptPasswordEncoder().matches(password, this.senha)
     }
 }

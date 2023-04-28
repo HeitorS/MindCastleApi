@@ -34,9 +34,9 @@ class AuthController(private val userService: UserService) {
     @PostMapping("register")
     fun register(@RequestBody body: RegisterDTO): ResponseEntity<User> {
         val user = User();
-        user.name = body.name;
+        user.nome = body.nome;
         user.email = body.email;
-        user.password = body.password;
+        user.senha = body.senha;
 
         return ResponseEntity.ok(this.userService.save(user));
     }
@@ -46,7 +46,7 @@ class AuthController(private val userService: UserService) {
         val user = this.userService.findByEmail(body.email)?:
             return ResponseEntity.badRequest().body(Message("Usuario não encontrado!"));
 
-        if (!user.comparePassword(body.password)) {
+        if (!user.comparePassword(body.senha)) {
             return ResponseEntity.badRequest().body(Message("Senha inválida!"));
         }
 
