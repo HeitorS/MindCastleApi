@@ -6,6 +6,7 @@ import br.com.mind.castle.mindcastle.models.Message
 import br.com.mind.castle.mindcastle.dtos.LoginDTO
 import br.com.mind.castle.mindcastle.entity.User
 import br.com.mind.castle.mindcastle.models.Token
+import br.com.mind.castle.mindcastle.service.TokenService
 
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.Cookie
@@ -27,66 +28,24 @@ import java.util.Date
 
 @RestController
 @RequestMapping("auth")
-class AuthController(private val userService: UserService) {
-
-    private val key = "Lrc6jEQNYEfrwlCVocgvbfVV3Mq7xRb2BV2DAQmKBWyzHYMKdQbkPBZD1FYtfSBqFDfD62bmWEZN7mgdsLNiZw=="
-
-    @PostMapping("register")
-    fun register(@RequestBody body: RegisterDTO): ResponseEntity<User> {
-        val user = User();
-        user.nome = body.nome;
-        user.email = body.email;
-        user.senha = body.senha;
-
-        return ResponseEntity.ok(this.userService.save(user));
-    }
+class AuthController(
+    private val userService: UserService
+) {
 
     @PostMapping("login")
-    fun login(@RequestBody body: LoginDTO, response: HttpServletResponse): ResponseEntity<Any> {
+    fun login(@RequestBody body: LoginDTO): ResponseEntity<Any> {
         val user = this.userService.findByEmail(body.email)?:
-            return ResponseEntity.badRequest().body(Message("Usuario não encontrado!"));
+        return ResponseEntity.badRequest().body(Message("Usuario não encontrado!"));
 
         if (!user.comparePassword(body.senha)) {
-            return ResponseEntity.badRequest().body(Message("Senha inválida!"));
+            return ResponseEntity.badRequest().body(Message("Usuário ou senha inválida!"));
         }
 
-        val issuer = user.id.toString();
-
-        val jwt = Jwts.builder()
-            .setIssuer(issuer)
-            .setExpiration(Date(System.currentTimeMillis()+60*24*1000))
-            .signWith(SignatureAlgorithm.HS512, key.toByteArray())
-            .compact()
-
-        val cookie = Cookie("jwt", jwt);
-        cookie.isHttpOnly = true;
-
-        response.addCookie(cookie);
-
-        return ResponseEntity.ok(Token(jwt));
-    }
-
-    @GetMapping("user")
-    fun user(@CookieValue("jwt") jwt: String?): ResponseEntity<Any> {
-        try {
-            if (jwt == null) {
-                return ResponseEntity.status(401).body(Message("Não autorizado!"));
-            }
-
-            val body = Jwts.parser().setSigningKey(key.toByteArray()).parseClaimsJws(jwt).body;
-
-            return ResponseEntity.ok(this.userService.getbyId(body.issuer.toInt()));
-        } catch (e: Exception) {
-            return ResponseEntity.status(401).body(Message("Não autorizado!"));
-        }
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("logout")
-    fun logout(response: HttpServletResponse): ResponseEntity<Any> {
-        var cookie = Cookie("jwt","")
-        cookie.maxAge = 0
-        response.addCookie(cookie);
-
+    fun logout(): ResponseEntity<Any> {
         return ResponseEntity.ok(Message("Sucesso!"));
     }
 }

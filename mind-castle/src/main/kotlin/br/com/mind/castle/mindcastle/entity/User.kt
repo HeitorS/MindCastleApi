@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import java.time.LocalDateTime
 
 
 @Entity
@@ -33,7 +34,18 @@ class User {
             field = passwordEncoder.encode(value)
         }
 
+    @Column()
+    var dataCriacao = LocalDateTime.now()
+
+    constructor(nome: String, email: String, senha: String) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+    }
+
     fun comparePassword(password: String): Boolean {
         return BCryptPasswordEncoder().matches(password, this.senha)
     }
+
+
 }
